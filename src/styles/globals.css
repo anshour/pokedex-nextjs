@@ -6,3 +6,22 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
 }
+
+.table-stats {
+  table {
+    table-layout: auto;
+  }
+
+  tr th {
+    @apply text-gray-500 dark:text-gray-400;
+    @apply font-medium text-sm text-left;
+    @apply px-2 py-1.5;
+
+  }
+
+  tr td {
+    @apply font-medium text-sm text-left;
+    @apply px-2 py-1.5;
+  }
+
+}
