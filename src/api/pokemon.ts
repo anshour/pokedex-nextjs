@@ -1,14 +1,4 @@
-import {
-  PokemonAbility,
-  PokemonCries,
-  PokemonGameIndex,
-  PokemonMove,
-  PokemonPastAbility,
-  PokemonSpecies,
-  PokemonSprites,
-  PokemonStat,
-  PokemonType,
-} from "@/types/pokemon";
+import { PokemonDetail, PokemonSpeciesDetail } from "@/types/pokemon";
 import { default as baseAxios } from "axios";
 
 const axios = baseAxios.create({
@@ -25,31 +15,7 @@ export interface PokemonListResponse {
   }[];
 }
 
-export interface PokemonDetailResponse {
-  abilities: PokemonAbility[];
-  base_experience: number;
-  cries: PokemonCries;
-  forms: PokemonSpecies[];
-  game_indices: PokemonGameIndex[];
-  height: number;
-  held_items: any[];
-  id: number;
-  is_default: boolean;
-  location_area_encounters: string;
-  moves: PokemonMove[];
-  name: string;
-  order: number;
-  past_abilities: PokemonPastAbility[];
-  past_types: any[];
-  species: PokemonSpecies;
-  sprites: PokemonSprites;
-  stats: PokemonStat[];
-  types: PokemonType[];
-  weight: number;
-}
-
-export const fetchPokemonList = async (page = 1) => {
-  const limit = 20;
+export const fetchPokemonList = async (page = 1, limit: number) => {
   const offset = (page - 1) * limit;
 
   return axios
@@ -58,9 +24,11 @@ export const fetchPokemonList = async (page = 1) => {
 };
 
 export const fetchPokemonDetail = async (id: number | string) => {
-  return axios
-    .get<PokemonDetailResponse>(`/pokemon/${id}`)
-    .then((res) => res.data);
+  return axios.get<PokemonDetail>(`/pokemon/${id}`).then((res) => res.data);
 };
 
-
+export const fetchPokemonSpecies = async (id: number | string) => {
+  return axios
+    .get<PokemonSpeciesDetail>(`/pokemon-species/${id}`)
+    .then((res) => res.data);
+};
