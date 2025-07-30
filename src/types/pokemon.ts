@@ -30,7 +30,7 @@ interface SpeciesGenus {
   language: BasicProperty;
 }
 
-interface SpeciesName {
+interface IntlName {
   language: BasicProperty;
   name: string;
 }
@@ -140,10 +140,125 @@ export interface PokemonSpeciesDetail {
   is_legendary: boolean;
   is_mythical: boolean;
   name: string;
-  names: SpeciesName[];
+  names: IntlName[];
   order: number;
   pal_park_encounters: SpeciesPalParkEncounter[];
   pokedex_numbers: SpeciesPokedexNumber[];
   shape: BasicProperty;
   varieties: SpeciesVariety[];
+}
+
+interface ContestCombos {
+  normal: ContestComboDetail;
+  super: ContestComboDetail;
+}
+
+interface ContestComboDetail {
+  use_after: BasicProperty[] | null;
+  use_before: BasicProperty[] | null;
+}
+
+interface EffectEntry {
+  effect: string;
+  language: BasicProperty;
+  short_effect: string;
+}
+
+interface FlavorTextEntry {
+  flavor_text: string;
+  language: BasicProperty;
+  version_group: BasicProperty;
+}
+interface Machine {
+  machine: {
+    url: string;
+  };
+  version_group: BasicProperty;
+}
+
+export interface PokemonMoveDetail {
+  accuracy: number;
+  contest_combos: ContestCombos;
+  contest_effect: {
+    url: string;
+  };
+  contest_type: BasicProperty;
+  damage_class: BasicProperty;
+  effect_chance: null;
+  effect_changes: any[];
+  effect_entries: EffectEntry[];
+  flavor_text_entries: FlavorTextEntry[];
+  generation: BasicProperty;
+  id: number;
+  learned_by_pokemon: BasicProperty[];
+  machines: Machine[];
+  meta: MoveMeta;
+  name: string;
+  names: IntlName[];
+  past_values: any[];
+  power: number;
+  pp: number;
+  priority: number;
+  stat_changes: any[];
+  super_contest_effect: {
+    url: string;
+  };
+  target: BasicProperty;
+  type: BasicProperty;
+}
+
+interface MoveMeta {
+  ailment: BasicProperty;
+  ailment_chance: number;
+  category: BasicProperty;
+  crit_rate: number;
+  drain: number;
+  flinch_chance: number;
+  healing: number;
+  max_hits: null | number;
+  max_turns: null | number;
+  min_hits: null | number;
+  min_turns: null | number;
+  stat_chance: number;
+}
+
+export interface PokemonEvolutionResponse {
+  baby_trigger_item: null;
+  chain: EvolutionChain;
+  id: number;
+}
+
+export interface EvolutionStep {
+  pokemon: PokemonDetail | null;
+  species: BasicProperty;
+  evolutionTrigger: string | null;
+  minLevel: number | null;
+}
+
+export interface EvolutionChain {
+  evolution_details: EvolutionDetail[];
+  evolves_to: EvolutionChain[];
+  is_baby: boolean;
+  species: BasicProperty;
+}
+
+interface EvolutionDetail {
+  gender: null | any;
+  held_item: null | BasicProperty;
+  item: BasicProperty | null;
+  known_move: null | any;
+  known_move_type: null | any;
+  location: null | any;
+  min_affection: null | number;
+  min_beauty: null | number;
+  min_happiness: number | null;
+  min_level: null | number;
+  needs_overworld_rain: boolean;
+  party_species: null | any;
+  party_type: null | any;
+  relative_physical_stats: null | any;
+  time_of_day: string;
+  trade_species: null | any;
+  trigger: BasicProperty;
+  turn_upside_down: boolean;
 }

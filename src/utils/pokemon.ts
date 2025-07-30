@@ -1,10 +1,15 @@
-import { PokemonSprites, PokemonStat } from "@/types/pokemon";
-
-export const STAT_LEVEL = {
-  low: 0,
-  medium: 60,
-  high: 100,
-};
+import {
+  DEFAULT_POKEMON_COLOR,
+  POKEMON_TYPE_COLORS,
+  STAT_LEVEL,
+  TOTAL_STAT_LEVEL,
+} from "@/constants/pokemon";
+import {
+  EvolutionChain,
+  EvolutionStep,
+  PokemonSprites,
+  PokemonStat,
+} from "@/types/pokemon";
 
 export enum StatLevel {
   low = "low",
@@ -24,13 +29,6 @@ export enum TotalStatLevel {
   strong = "strong",
   legendary = "legendary",
 }
-
-export const TOTAL_STAT_LEVEL = {
-  weak: 0,
-  average: 400,
-  strong: 500,
-  legendary: 600,
-};
 
 export function getTotalStatLevel(total: number): TotalStatLevel {
   if (total >= TOTAL_STAT_LEVEL.legendary) return TotalStatLevel.legendary;
@@ -96,6 +94,16 @@ export function getSpeciesIdFromUrl(url?: string): number | null {
   return match ? parseInt(match[1], 10) : null;
 }
 
+export function getEvolutionChainIdFromUrl(url?: string): number | null {
+  const match = url?.match(/\/evolution-chain\/(\d+)\//);
+  return match ? parseInt(match[1], 10) : null;
+}
+
+export function getMoveIdFromUrl(url?: string): number | null {
+  const match = url?.match(/\/move\/(\d+)\//);
+  return match ? parseInt(match[1], 10) : null;
+}
+
 export function getPokemonGenderPercentage(
   genderRate: number | null
 ): [{ male: string; female: string; genderless: string }] {
@@ -121,8 +129,9 @@ export function getPokemonThumbnailImage(sprites: PokemonSprites): string {
   return (
     sprites.front_default ||
     sprites.other?.["official-artwork"]?.front_default ||
-    // TODO: Add a fallback image URL
-    ""
+    sprites.other?.["dream_world"]?.front_default ||
+    sprites.other?.["home"]?.front_default ||
+    "/default-pokemon.png"
   );
 }
 
@@ -130,32 +139,37 @@ export function getPokemonArtworkImage(sprites: PokemonSprites): string {
   return (
     sprites.other?.["official-artwork"]?.front_default ||
     sprites.front_default ||
-    // TODO: Add a fallback image URL
-    ""
+    sprites.other?.["dream_world"]?.front_default ||
+    sprites.other?.["home"]?.front_default ||
+    "/default-pokemon.png"
   );
 }
 
 export function getPokemonCardColor(type: string): string {
-  const typeColorMap: Record<string, string> = {
-    normal: "#9B9B7A",
-    fire: "#FF6B35",
-    water: "#4A90E2",
-    electric: "#FFD23F",
-    grass: "#66BB6A",
-    ice: "#81D4FA",
-    fighting: "#E53935",
-    poison: "#AB47BC",
-    ground: "#D4A574",
-    flying: "#8E7CC3",
-    psychic: "#EC407A",
-    bug: "#8BC34A",
-    rock: "#A1887F",
-    ghost: "#7986CB",
-    dragon: "#5C6BC0",
-    dark: "#6D4C41",
-    steel: "#90A4AE",
-    fairy: "#F48FB1",
-  };
+  const normalizedType = type.toLowerCase() as keyof typeof POKEMON_TYPE_COLORS;
+  return POKEMON_TYPE_COLORS[normalizedType] || DEFAULT_POKEMON_COLOR;
+}
 
-  return typeColorMap[type.toLowerCase()] || "#424242";
+export function getEvolutionStep(chain: EvolutionChain): EvolutionStep[] {
+  const result: EvolutionStep[] = [];
+
+  let current = chain;
+  while (current) {
+    const details = current.evolution_details?.[0];
+
+    result.push({
+      species: current.species,
+      evolutionTrigger: details?.trigger?.name || null,
+      minLevel: details?.min_level || null,
+      pokemon: null, // Will be filled later
+    });
+
+    if (current.evolves_to.length > 0) {
+      current = current.evolves_to[0];
+    } else {
+      break;
+    }
+  }
+
+  return result;
 }

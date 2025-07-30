@@ -1,11 +1,18 @@
 import {
   fetchPokemonDetail,
+  fetchPokemonEvolution,
   fetchPokemonList,
+  fetchPokemonMove,
   fetchPokemonSpecies,
 } from "@/api/pokemon";
 import { QUERY_KEYS } from "@/constants/query-keys";
-import displayErrorToast from "@/utils/display-error-toast";
-import { getPokemonIdFromUrl } from "@/utils/pokemon";
+import {
+  getEvolutionChainIdFromUrl,
+  getEvolutionStep,
+  getMoveIdFromUrl,
+  getPokemonIdFromUrl,
+  getSpeciesIdFromUrl,
+} from "@/utils/pokemon";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export const usePokemonList = ({ page = "1", limit = 20 }) => {
@@ -34,10 +41,6 @@ export const usePokemonList = ({ page = "1", limit = 20 }) => {
       };
     },
     placeholderData: keepPreviousData,
-    throwOnError: (error: Error) => {
-      displayErrorToast(error);
-      return false;
-    },
   });
 
   const pokemons = query.data?.pokemons || [];
@@ -56,18 +59,59 @@ export const usePokemonDetail = (id: string | number) => {
 
   const query = useQuery({
     queryKey: QUERY_KEYS.POKEMON_DETAIL(pokemonId),
-    queryFn: async () => fetchPokemonDetail(pokemonId),
+    queryFn: async () => {
+      const data = await fetchPokemonDetail(pokemonId);
+
+      const speciesId = getSpeciesIdFromUrl(data.species.url);
+      const species = await fetchPokemonSpecies(speciesId!);
+
+      const evolutionChainId = getEvolutionChainIdFromUrl(
+        species.evolution_chain.url
+      );
+      const evolutionData = await fetchPokemonEvolution(evolutionChainId!);
+
+      const evolutionStep = getEvolutionStep(evolutionData.chain);
+
+      const detailedEvolutionStep = await Promise.all(
+        evolutionStep.map(async (step) => {
+          const pokemonId = getSpeciesIdFromUrl(step.species.url);
+          const pokemonDetail = await fetchPokemonDetail(pokemonId!);
+          return {
+            ...step,
+            pokemon: pokemonDetail,
+          };
+        })
+      );
+
+      const moves = await Promise.all(
+        // Only get the first 10 moves
+        data.moves.slice(0, 10).map(async (move) => {
+          const moveId = getMoveIdFromUrl(move.move.url);
+          const moveDetail = await fetchPokemonMove(moveId!);
+
+          return moveDetail;
+        })
+      );
+
+      return {
+        pokemon: data,
+        move_detail: moves,
+        species,
+        evolution_chain: evolutionData,
+        evolution_step: detailedEvolutionStep,
+      };
+    },
     enabled: !!pokemonId,
     placeholderData: keepPreviousData,
-    throwOnError: (error: Error) => {
-      displayErrorToast(error);
-      return false;
-    },
   });
 
-  const pokemon = query.data || null;
+  const pokemon = query.data?.pokemon || null;
+  const moves = query.data?.move_detail || [];
+  const species = query.data?.species || null;
+  const evolutionChain = query.data?.evolution_chain || null;
+  const evolutionStep = query.data?.evolution_step || [];
 
-  return { pokemon, ...query };
+  return { pokemon, moves, species, evolutionChain, evolutionStep, ...query };
 };
 
 export const usePokemonSpecies = (id: string | number | null) => {
@@ -78,13 +122,45 @@ export const usePokemonSpecies = (id: string | number | null) => {
     queryFn: () => fetchPokemonSpecies(speciesId!),
     enabled: !!speciesId,
     placeholderData: keepPreviousData,
-    throwOnError: (error: Error) => {
-      displayErrorToast(error);
-      return false;
-    },
   });
 
   const species = query.data || null;
 
   return { species, ...query };
+};
+
+export const usePokemonEvolution = (id: string | number | null) => {
+  const evolutionChainId = typeof id === "string" ? parseInt(id, 10) : id;
+
+  const query = useQuery({
+    queryKey: QUERY_KEYS.POKEMON_EVOLUTION_CHAIN(evolutionChainId!),
+    queryFn: async () => {
+      const data = await fetchPokemonEvolution(evolutionChainId!);
+
+      const evolutionStep = getEvolutionStep(data.chain);
+
+      const detailedStep = await Promise.all(
+        evolutionStep.map(async (step) => {
+          const pokemonId = getSpeciesIdFromUrl(step.species.url);
+          const pokemonDetail = await fetchPokemonDetail(pokemonId!);
+          return {
+            ...step,
+            pokemon: pokemonDetail,
+          };
+        })
+      );
+
+      return {
+        ...data,
+        evolutionStep: detailedStep,
+      };
+    },
+    enabled: !!evolutionChainId,
+    placeholderData: keepPreviousData,
+  });
+
+  const evolution = query.data || null;
+  const evolutionStep = evolution?.evolutionStep || [];
+
+  return { evolution, evolutionStep, ...query };
 };
