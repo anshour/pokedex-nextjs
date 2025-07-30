@@ -11,6 +11,12 @@ export function capitalizeWords(str?: string): string {
   return capitalizedWords.join(" ");
 }
 
+export function formatName(str?: string | null): string {
+  if (!str || typeof str !== "string") return "";
+
+  return capitalizeWords(str.replace(/-/g, " "));
+}
+
 export function kgToLbs(kg: number): number {
   const lbs = kg * 2.20462;
   return Math.round(lbs * 100) / 100;

@@ -1,5 +1,5 @@
 import { PokemonDetail } from "@/types/pokemon";
-import { capitalizeWords } from "@/utils/helper";
+import { capitalizeWords, formatName } from "@/utils/helper";
 import { getPokemonArtworkImage, getPokemonCardColor } from "@/utils/pokemon";
 import Badge from "../ui/badge";
 
@@ -15,9 +15,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       className="p-2 rounded-lg cursor-pointer h-full flex flex-col bg-pattern"
       style={{ backgroundColor: bgColor }}
     >
-      <h2 className="font-bold text-white">
-        {capitalizeWords(pokemon.name)}
-      </h2>
+      <h2 className="font-bold text-white">{formatName(pokemon.name)}</h2>
 
       <div className="flex justify-between flex-grow">
         <div>

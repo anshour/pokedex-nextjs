@@ -1,5 +1,5 @@
 import { PokemonMoveDetail } from "@/types/pokemon";
-import { capitalizeWords } from "@/utils/helper";
+import { capitalizeWords, formatName } from "@/utils/helper";
 
 interface Props {
   moves: PokemonMoveDetail[];
@@ -20,7 +20,7 @@ const PokemonMovesSection = ({ moves }: Props) => {
         <tbody>
           {moves.map((move) => (
             <tr key={move.id}>
-              <td className="cell-body">{move.name}</td>
+              <td className="cell-body">{formatName(move.name)}</td>
               <td className="cell-body">{capitalizeWords(move.type.name)}</td>
               <td className="cell-body">{move.power || "—"}</td>
               <td className="cell-body">{move.accuracy || "—"}</td>
@@ -28,7 +28,10 @@ const PokemonMovesSection = ({ moves }: Props) => {
           ))}
           {moves.length === 0 && (
             <tr>
-              <td colSpan={4} className="font-medium text-sm text-center text-gray-500 py-6" >
+              <td
+                colSpan={4}
+                className="font-medium text-sm text-center text-gray-500 py-6"
+              >
                 No moves available
               </td>
             </tr>
