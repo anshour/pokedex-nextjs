@@ -2,7 +2,7 @@
 
 A modern, responsive Pokedex web application built with Next.js and TypeScript that allows users to explore Pokemon data from the PokeAPI.
 
-// TODO : ADD SCREENSHOTS
+<img width="500" height="348" alt="screenshots" src="https://github.com/user-attachments/assets/5dcdb17d-739b-46ea-900b-1584f10c3738" />
 
 ## ✨ Features
 
@@ -82,9 +82,6 @@ src/
 ├── types/               # TypeScript type definitions
 │   └── pokemon.ts
 └── utils/               # Utility functions
-    ├── display-error-toast.ts
-    ├── helper.ts
-    └── pokemon.ts
 ```
 
 ## 🎯 Key Components
