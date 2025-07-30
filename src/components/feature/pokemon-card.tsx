@@ -12,7 +12,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
 
   return (
     <div
-      className="p-2 rounded-lg cursor-pointer h-full flex flex-col"
+      className="p-2 rounded-lg cursor-pointer h-full flex flex-col bg-pattern"
       style={{ backgroundColor: bgColor }}
     >
       <h2 className="font-bold text-white">
@@ -27,11 +27,11 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
             </Badge>
           ))}
         </div>
-        <div className="flex-grow flex justify-end items-end h-20 sm:h24">
+        <div className="flex-grow flex justify-end items-end h-18 sm:h-24">
           <img
             src={getPokemonArtworkImage(pokemon.sprites)}
             alt={pokemon.name}
-            className="object-contain max-w-20 max-h-20 sm:max-w-24 sm:max-h-24"
+            className="object-contain max-w-20 max-h-18 sm:max-w-24 sm:max-h-24"
           />
         </div>
       </div>

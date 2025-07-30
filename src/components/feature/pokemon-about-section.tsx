@@ -22,25 +22,29 @@ const PokemonAboutSection = ({ pokemon, species }: Props) => {
 
   return (
     <div className="py-3 overflow-x-auto">
-      <table className="table-stats">
+      <table className="table-auto">
         <tbody>
           <tr>
-            <th>Species</th>
-            <td>{capitalizeWords(pokemon.species.name)}</td>
+            <th className="cell-head">Species</th>
+            <td className="cell-body">
+              {capitalizeWords(pokemon.species.name)}
+            </td>
           </tr>
           <tr>
-            <th>Height</th>
-            <td>{dmToFeetInches(pokemon.height)} ({dmToCm(pokemon.height)} cm)</td>
+            <th className="cell-head">Height</th>
+            <td className="cell-body">
+              {dmToFeetInches(pokemon.height)} ({dmToCm(pokemon.height)} cm)
+            </td>
           </tr>
           <tr>
-            <th>Weight</th>
-            <td>
+            <th className="cell-head">Weight</th>
+            <td className="cell-body">
               {hgToLbs(pokemon.weight)} lbs ({hgToKg(pokemon.weight)} kg)
             </td>
           </tr>
           <tr>
-            <th>Abilities</th>
-            <td>
+            <th className="cell-head">Abilities</th>
+            <td className="cell-body">
               {pokemon.abilities
                 .filter((ability) => ability.ability !== null)
                 .map((ability) => capitalizeWords(ability.ability!.name))
@@ -50,11 +54,11 @@ const PokemonAboutSection = ({ pokemon, species }: Props) => {
         </tbody>
       </table>
       <h3 className="font-bold ml-2 mt-3 mb-2">Breeding</h3>
-      <table className="table-stats">
+      <table className="table">
         <tbody>
           <tr>
-            <th>Gender</th>
-            <td>
+            <th className="cell-head">Gender</th>
+            <td className="cell-body">
               {genderPercentages.map((percentage, index) => (
                 <div className="flex gap-2" key={index}>
                   {percentage.male !== "0%" && (
@@ -82,16 +86,16 @@ const PokemonAboutSection = ({ pokemon, species }: Props) => {
             </td>
           </tr>
           <tr>
-            <th>Egg Groups</th>
-            <td>
+            <th className="cell-head">Egg Groups</th>
+            <td className="cell-body">
               {species.egg_groups
                 .map((group) => capitalizeWords(group.name))
                 .join(", ")}
             </td>
           </tr>
           <tr>
-            <th>Egg Cycle</th>
-            <td>{species.hatch_counter} steps</td>
+            <th className="cell-head">Egg Cycle</th>
+            <td className="cell-body">{species.hatch_counter} steps</td>
           </tr>
         </tbody>
       </table>

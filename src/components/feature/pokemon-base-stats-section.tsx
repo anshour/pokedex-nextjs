@@ -1,11 +1,7 @@
 import { PokemonDetail } from "@/types/pokemon";
 import Progress from "../ui/progress";
-import {
-  getBaseStats,
-  StatLevel,
-  TOTAL_STAT_LEVEL,
-  TotalStatLevel,
-} from "@/utils/pokemon";
+import { getBaseStats, StatLevel, TotalStatLevel } from "@/utils/pokemon";
+import { TOTAL_STAT_LEVEL } from "@/constants/pokemon";
 
 interface Props {
   pokemon: PokemonDetail;
@@ -41,19 +37,19 @@ const PokemonBaseStatsSection = ({ pokemon }: Props) => {
 
   return (
     <div className="py-3">
-      <table className="table-stats w-full">
+      <table className="table-auto w-full">
         <tbody>
           <tr>
-            <th>HP</th>
-            <td>{hp.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">HP</th>
+            <td className="cell-body">{hp.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress color={getStatColor(hp.level)} value={hp.base_stat} />
             </td>
           </tr>
           <tr>
-            <th>Attack</th>
-            <td>{attack.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">Attack</th>
+            <td className="cell-body">{attack.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress
                 color={getStatColor(attack.level)}
                 value={attack.base_stat}
@@ -61,9 +57,9 @@ const PokemonBaseStatsSection = ({ pokemon }: Props) => {
             </td>
           </tr>
           <tr>
-            <th>Defense</th>
-            <td>{defense.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">Defense</th>
+            <td className="cell-body">{defense.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress
                 color={getStatColor(defense.level)}
                 value={defense.base_stat}
@@ -71,9 +67,9 @@ const PokemonBaseStatsSection = ({ pokemon }: Props) => {
             </td>
           </tr>
           <tr>
-            <th>Sp. Atk</th>
-            <td>{specialAttack.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">Sp. Atk</th>
+            <td className="cell-body">{specialAttack.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress
                 color={getStatColor(specialAttack.level)}
                 value={specialAttack.base_stat}
@@ -81,9 +77,9 @@ const PokemonBaseStatsSection = ({ pokemon }: Props) => {
             </td>
           </tr>
           <tr>
-            <th>Sp. Def</th>
-            <td>{specialDefense.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">Sp. Def</th>
+            <td className="cell-body">{specialDefense.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress
                 color={getStatColor(specialDefense.level)}
                 value={specialDefense.base_stat}
@@ -91,9 +87,9 @@ const PokemonBaseStatsSection = ({ pokemon }: Props) => {
             </td>
           </tr>
           <tr>
-            <th>Speed</th>
-            <td>{speed.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">Speed</th>
+            <td className="cell-body">{speed.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress
                 color={getStatColor(speed.level)}
                 value={speed.base_stat}
@@ -101,9 +97,9 @@ const PokemonBaseStatsSection = ({ pokemon }: Props) => {
             </td>
           </tr>
           <tr>
-            <th>Total</th>
-            <td>{total.base_stat}</td>
-            <td className="w-full">
+            <th className="cell-head">Total</th>
+            <td className="cell-body">{total.base_stat}</td>
+            <td className="cell-body w-full">
               <Progress
                 color={getTotalStatColor(total.level)}
                 value={total.base_stat}

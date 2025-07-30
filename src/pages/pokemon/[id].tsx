@@ -6,21 +6,18 @@ import Badge from "@/components/ui/badge";
 import Button from "@/components/ui/button";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import Tabs, { TabData } from "@/components/ui/tabs";
-import { usePokemonDetail, usePokemonSpecies } from "@/hooks/use-pokemon";
+import { usePokemonDetail } from "@/hooks/use-pokemon";
 import { capitalizeWords } from "@/utils/helper";
-import {
-  getPokemonArtworkImage,
-  getPokemonCardColor,
-  getSpeciesIdFromUrl,
-} from "@/utils/pokemon";
+import { getPokemonArtworkImage, getPokemonCardColor } from "@/utils/pokemon";
 import { MoveLeft } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();
   const pokemonId = router.query.id as string;
+
+  const readablePokemonId = `#${pokemonId?.padStart(3, "0")}`;
 
   const tabsData: TabData[] = [
     { label: "About" },
@@ -31,12 +28,10 @@ export default function Page() {
 
   const [activeTab, setActiveTab] = useState(tabsData[0]);
 
-  const { pokemon } = usePokemonDetail(pokemonId);
-  const { species } = usePokemonSpecies(
-    getSpeciesIdFromUrl(pokemon?.species.url)
-  );
+  const { pokemon, moves, species, evolutionStep } =
+    usePokemonDetail(pokemonId);
 
-  const isLoadingComplete = pokemon !== null && species !== null;
+  const isLoadingComplete = pokemon && species;
 
   const handleTabChange = (index: number, tab: TabData): void => {
     setActiveTab(tab);
@@ -45,60 +40,73 @@ export default function Page() {
   const mainType = pokemon?.types[0]?.type.name;
   const bgColor = getPokemonCardColor(mainType || "");
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
-    <div
-      className="flex flex-col min-h-screen"
-      style={{ backgroundColor: bgColor }}
-    >
-      {isLoadingComplete ? (
-        <div className="flex flex-col sm:flex-row items-start justify-between p-0 sm:p-4 sm:gap-8 flex-grow">
-          <div className="p-3 sm:p-0 z-10 w-full">
-            <Link href="/">
-              <Button className="bg-transparent text-white p-0 mb-3 focus:ring-0 hover:bg-transparent focus:ring-offset-0 focus:outline-none">
+    <div className="min-h-screen" style={{ backgroundColor: bgColor }}>
+      <div className="flex flex-col max-w-5xl mx-auto min-h-screen">
+        {isLoadingComplete ? (
+          <div className="flex flex-col sm:flex-row items-start justify-between p-0 sm:p-4 sm:gap-8 flex-grow">
+            <div className="p-3 sm:p-0 z-10 w-full">
+              <Button
+                onClick={handleBack}
+                className="bg-transparent text-white p-0 mb-3 focus:ring-0 hover:bg-transparent focus:ring-offset-0 focus:outline-none"
+              >
                 <MoveLeft />
               </Button>
-            </Link>
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-bold text-white mb-1">
-                  {capitalizeWords(pokemon.name)}
-                </h1>
+              <div className="flex justify-between items-center">
                 <div>
-                  {pokemon.types.map((type) => (
-                    <Badge key={type.type.name}>
-                      {capitalizeWords(type.type.name)}
-                    </Badge>
-                  ))}
+                  <h1 className="text-2xl font-bold text-white mb-1">
+                    {capitalizeWords(pokemon.name)}
+                  </h1>
+                  <div>
+                    {pokemon!.types.map((type) => (
+                      <Badge key={type.type.name}>
+                        {capitalizeWords(type.type.name)}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-lg font-bold text-white">
+                    {readablePokemonId}
+                  </span>
                 </div>
               </div>
-              <div>
-                <span className="text-lg font-bold text-white">#001</span>
-              </div>
+              <img
+                className="mx-auto h-42 sm:h-64 -mb-20"
+                src={getPokemonArtworkImage(pokemon.sprites)}
+                alt={pokemon.name}
+              />
             </div>
-            <img
-              className="mx-auto h-42 sm:h-64 -mb-20"
-              src={getPokemonArtworkImage(pokemon.sprites)}
-              alt={pokemon.name}
-            />
-          </div>
 
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl px-3 pt-7 sm:pt-3 pb-3 w-full mt-10">
-            <Tabs tabs={tabsData} onTabChange={handleTabChange} />
-            {activeTab.label === "About" && (
-              <PokemonAboutSection pokemon={pokemon} species={species} />
-            )}
-            {activeTab.label === "Base Stats" && (
-              <PokemonBaseStatsSection pokemon={pokemon} />
-            )}
-            {activeTab.label === "Evolution" && <PokemonEvolutionSection />}
-            {activeTab.label === "Moves" && <PokemonMovesSection />}
+            <div
+              id="stats-section"
+              className="bg-white rounded-t-3xl sm:rounded-3xl px-3 pt-7 sm:pt-3 pb-3 w-full mt-10 flex-grow sm:flex-grow-0"
+            >
+              <Tabs tabs={tabsData} onTabChange={handleTabChange} />
+              {activeTab.label === "About" && (
+                <PokemonAboutSection pokemon={pokemon} species={species} />
+              )}
+              {activeTab.label === "Base Stats" && (
+                <PokemonBaseStatsSection pokemon={pokemon} />
+              )}
+              {activeTab.label === "Evolution" && (
+                <PokemonEvolutionSection evolutionStep={evolutionStep} />
+              )}
+              {activeTab.label === "Moves" && (
+                <PokemonMovesSection moves={moves} />
+              )}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="mt-24 text-white">
-          <LoadingSpinner />
-        </div>
-      )}
+        ) : (
+          <div className="mt-24 text-white">
+            <LoadingSpinner />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
