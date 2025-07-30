@@ -1,4 +1,9 @@
-import { PokemonDetail, PokemonSpeciesDetail } from "@/types/pokemon";
+import {
+  PokemonDetail,
+  PokemonEvolutionResponse,
+  PokemonMoveDetail,
+  PokemonSpeciesDetail,
+} from "@/types/pokemon";
 import { default as baseAxios } from "axios";
 
 const axios = baseAxios.create({
@@ -31,4 +36,14 @@ export const fetchPokemonSpecies = async (id: number | string) => {
   return axios
     .get<PokemonSpeciesDetail>(`/pokemon-species/${id}`)
     .then((res) => res.data);
+};
+
+export const fetchPokemonEvolution = async (id: number | string) => {
+  return axios
+    .get<PokemonEvolutionResponse>(`/evolution-chain/${id}`)
+    .then((res) => res.data);
+};
+
+export const fetchPokemonMove = async (id: number | string) => {
+  return axios.get<PokemonMoveDetail>(`/move/${id}`).then((res) => res.data);
 };
