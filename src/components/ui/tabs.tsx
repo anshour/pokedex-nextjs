@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 
 export interface TabData {
   id?: string;
   label: string;
+  content?: ReactNode;
   disabled?: boolean;
 }
 
@@ -11,6 +12,7 @@ export interface TabsProps {
   defaultActiveTab?: number;
   onTabChange?: (index: number, tab: TabData) => void;
   className?: string;
+  activeTab?: number;
 }
 
 const Tabs: React.FC<TabsProps> = ({
@@ -18,13 +20,21 @@ const Tabs: React.FC<TabsProps> = ({
   defaultActiveTab = 0,
   onTabChange,
   className = "",
+  activeTab: controlledActiveTab,
 }) => {
-  const [activeTab, setActiveTab] = useState<number>(defaultActiveTab);
+  const [internalActiveTab, setInternalActiveTab] =
+    useState<number>(defaultActiveTab);
+
+  const activeTab =
+    controlledActiveTab !== undefined ? controlledActiveTab : internalActiveTab;
 
   const handleTabClick = (index: number, tab: TabData): void => {
     if (tab.disabled) return;
 
-    setActiveTab(index);
+    if (controlledActiveTab === undefined) {
+      setInternalActiveTab(index);
+    }
+
     if (onTabChange) {
       onTabChange(index, tab);
     }
@@ -46,29 +56,36 @@ const Tabs: React.FC<TabsProps> = ({
   };
 
   return (
-    <div
-      className={`border-b border-gray-200 dark:border-gray-700 ${className} overflow-x-auto overflow-y-hidden`}
-    >
-      <ul className="flex -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-        {tabs.map((tab, index) => (
-          <li
-            key={tab.id || index}
-            className={`${
-              index === tabs.length - 1 ? "" : "me-2"
-            } shrink-0 grow-1`}
-          >
-            <button
-              onClick={() => handleTabClick(index, tab)}
-              className={getTabClasses(index, tab)}
-              disabled={tab.disabled}
-              aria-current={index === activeTab ? "page" : undefined}
-              type="button"
+    <div className="w-full">
+      <div
+        className={`border-b border-gray-200 dark:border-gray-700 ${className} overflow-x-auto overflow-y-hidden`}
+      >
+        <ul className="flex -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+          {tabs.map((tab, index) => (
+            <li
+              key={tab.id || index}
+              className={`${
+                index === tabs.length - 1 ? "" : "me-2"
+              } shrink-0 grow-1`}
             >
-              {tab.label}
-            </button>
-          </li>
-        ))}
-      </ul>
+              <button
+                onClick={() => handleTabClick(index, tab)}
+                className={getTabClasses(index, tab)}
+                disabled={tab.disabled}
+                aria-current={index === activeTab ? "page" : undefined}
+                type="button"
+              >
+                {tab.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Render tab content if provided */}
+      {tabs[activeTab]?.content && (
+        <div className="mt-4">{tabs[activeTab].content}</div>
+      )}
     </div>
   );
 };

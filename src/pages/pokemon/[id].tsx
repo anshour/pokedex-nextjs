@@ -19,23 +19,10 @@ export default function Page() {
 
   const readablePokemonId = `#${pokemonId?.padStart(3, "0")}`;
 
-  const tabsData: TabData[] = [
-    { label: "About" },
-    { label: "Base Stats" },
-    { label: "Evolution" },
-    { label: "Moves" },
-  ];
-
-  const [activeTab, setActiveTab] = useState(tabsData[0]);
-
   const { pokemon, moves, species, evolutionStep } =
     usePokemonDetail(pokemonId);
 
   const isLoadingComplete = pokemon && species;
-
-  const handleTabChange = (index: number, tab: TabData): void => {
-    setActiveTab(tab);
-  };
 
   const mainType = pokemon?.types[0]?.type.name;
   const bgColor = getPokemonCardColor(mainType || "");
@@ -86,19 +73,33 @@ export default function Page() {
               id="stats-section"
               className="bg-white rounded-t-3xl sm:rounded-3xl px-3 pt-7 sm:pt-3 pb-3 w-full mt-10 flex-grow sm:flex-grow-0"
             >
-              <Tabs tabs={tabsData} onTabChange={handleTabChange} />
-              {activeTab.label === "About" && (
-                <PokemonAboutSection pokemon={pokemon} species={species} />
-              )}
-              {activeTab.label === "Base Stats" && (
-                <PokemonBaseStatsSection pokemon={pokemon} />
-              )}
-              {activeTab.label === "Evolution" && (
-                <PokemonEvolutionSection evolutionStep={evolutionStep} />
-              )}
-              {activeTab.label === "Moves" && (
-                <PokemonMovesSection moves={moves} />
-              )}
+              <Tabs
+                tabs={[
+                  {
+                    label: "About",
+                    content: (
+                      <PokemonAboutSection
+                        pokemon={pokemon}
+                        species={species}
+                      />
+                    ),
+                  },
+                  {
+                    label: "Base Stats",
+                    content: <PokemonBaseStatsSection pokemon={pokemon} />,
+                  },
+                  {
+                    label: "Evolution",
+                    content: (
+                      <PokemonEvolutionSection evolutionStep={evolutionStep} />
+                    ),
+                  },
+                  {
+                    label: "Moves",
+                    content: <PokemonMovesSection moves={moves} />,
+                  },
+                ]}
+              />
             </div>
           </div>
         ) : (
