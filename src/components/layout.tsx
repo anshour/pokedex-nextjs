@@ -7,10 +7,10 @@ const Layout = ({ children }: PropsWithChildren) => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <main className="max-w-4xl mx-auto">
+      <main>
         <AnimatePresence mode="wait">
           <motion.div
-            key={router.asPath}
+            key={router.pathname}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
