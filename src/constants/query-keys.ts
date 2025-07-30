@@ -9,4 +9,4 @@ export const QUERY_KEYS = {
   POKEMON_SPECIES: (id: number) => ["pokemon", "species", id],
   POKEMON_EVOLUTION_CHAIN: (id: number) => ["pokemon", "evolution-chain", id],
   POKEMON_MOVE: (id: number) => ["pokemon", "move", id],
-};
+} as const;

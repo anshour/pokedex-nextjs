@@ -2,14 +2,15 @@ export const STAT_LEVEL = {
   low: 0,
   medium: 60,
   high: 100,
-};
+} as const;
+
 
 export const TOTAL_STAT_LEVEL = {
   weak: 0,
   average: 400,
   strong: 500,
   legendary: 600,
-};
+} as const;
 
 export const POKEMON_TYPE_COLORS = {
   normal: "#9B9B7A",
