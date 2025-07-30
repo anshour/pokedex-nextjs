@@ -1,10 +1,8 @@
-import { LucideIcon } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export interface TabData {
   id?: string;
   label: string;
-  icon?: LucideIcon;
   disabled?: boolean;
 }
 
@@ -66,7 +64,6 @@ const Tabs: React.FC<TabsProps> = ({
               aria-current={index === activeTab ? "page" : undefined}
               type="button"
             >
-              {tab.icon && <span className="me-2">{<tab.icon />}</span>}
               {tab.label}
             </button>
           </li>
