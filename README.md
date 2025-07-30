@@ -32,7 +32,7 @@ A modern, responsive Pokedex web application built with Next.js and TypeScript t
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/pokedex-nextjs.git
+   git clone https://github.com/anshour/pokedex-nextjs.git
    cd pokedex-nextjs
    ```
 
