@@ -7,21 +7,23 @@ body {
   font-style: normal;
 }
 
-.table-stats {
-  table {
-    table-layout: auto;
+.cell-head {
+  @apply text-gray-500 font-medium text-sm text-left px-2 py-1.5;
+}
+
+.cell-body {
+  @apply font-medium text-sm text-left px-2 py-1.5;
+}
+
+.bg-pattern {
+  background-image: url('/pattern.svg');
+  background-repeat: no-repeat;
+  background-size: 100px 100px;
+  background-position: bottom 7px right 7px;
+}
+
+@media only screen and (max-width: 640px) {
+  .bg-pattern {
+    background-size: 80px 80px;
   }
-
-  tr th {
-    @apply text-gray-500 dark:text-gray-400;
-    @apply font-medium text-sm text-left;
-    @apply px-2 py-1.5;
-
-  }
-
-  tr td {
-    @apply font-medium text-sm text-left;
-    @apply px-2 py-1.5;
-  }
-
 }
