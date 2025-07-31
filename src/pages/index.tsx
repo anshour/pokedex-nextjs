@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState("1");
-  const { pokemons, pagination, isLoading } = usePokemonList({
+  const { pokemons, pagination, isFetching } = usePokemonList({
     page: currentPage,
   });
 
@@ -22,8 +22,8 @@ export default function Page() {
       <div className="px-3 py-3 ">
         <h1 className="text-3xl font-extrabold my-3">Pokedex</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          <div className="col-span-2 sm:col-span-3 md:col-span-4">
-            <LoadingSpinner show={isLoading} />
+          <div className="col-span-2 sm:col-span-3 md:col-span-4 py-2">
+            <LoadingSpinner show={isFetching} />
           </div>
           {pokemons.map((pokemon) => (
             <Link key={pokemon.id} href={`/pokemon/${pokemon.id}`}>
