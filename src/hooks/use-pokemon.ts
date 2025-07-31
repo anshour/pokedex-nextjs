@@ -12,7 +12,7 @@ import {
   getMoveIdFromUrl,
   getPokemonIdFromUrl,
   getSpeciesIdFromUrl,
-} from "@/utils/pokemon";
+} from "@/utils";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export const usePokemonList = ({ page = "1", limit = 20 }) => {
@@ -102,7 +102,6 @@ export const usePokemonDetail = (id: string | number) => {
       };
     },
     enabled: !!pokemonId,
-    placeholderData: keepPreviousData,
   });
 
   const pokemon = query.data?.pokemon || null;
@@ -112,55 +111,4 @@ export const usePokemonDetail = (id: string | number) => {
   const evolutionStep = query.data?.evolution_step || [];
 
   return { pokemon, moves, species, evolutionChain, evolutionStep, ...query };
-};
-
-export const usePokemonSpecies = (id: string | number | null) => {
-  const speciesId = typeof id === "string" ? parseInt(id, 10) : id;
-
-  const query = useQuery({
-    queryKey: QUERY_KEYS.POKEMON_SPECIES(speciesId!),
-    queryFn: () => fetchPokemonSpecies(speciesId!),
-    enabled: !!speciesId,
-    placeholderData: keepPreviousData,
-  });
-
-  const species = query.data || null;
-
-  return { species, ...query };
-};
-
-export const usePokemonEvolution = (id: string | number | null) => {
-  const evolutionChainId = typeof id === "string" ? parseInt(id, 10) : id;
-
-  const query = useQuery({
-    queryKey: QUERY_KEYS.POKEMON_EVOLUTION_CHAIN(evolutionChainId!),
-    queryFn: async () => {
-      const data = await fetchPokemonEvolution(evolutionChainId!);
-
-      const evolutionStep = getEvolutionStep(data.chain);
-
-      const detailedStep = await Promise.all(
-        evolutionStep.map(async (step) => {
-          const pokemonId = getSpeciesIdFromUrl(step.species.url);
-          const pokemonDetail = await fetchPokemonDetail(pokemonId!);
-          return {
-            ...step,
-            pokemon: pokemonDetail,
-          };
-        })
-      );
-
-      return {
-        ...data,
-        evolutionStep: detailedStep,
-      };
-    },
-    enabled: !!evolutionChainId,
-    placeholderData: keepPreviousData,
-  });
-
-  const evolution = query.data || null;
-  const evolutionStep = evolution?.evolutionStep || [];
-
-  return { evolution, evolutionStep, ...query };
 };
