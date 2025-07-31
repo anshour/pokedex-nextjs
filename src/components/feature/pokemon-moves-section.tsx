@@ -1,5 +1,5 @@
 import { PokemonMoveDetail } from "@/types/pokemon";
-import { capitalizeWords, formatName } from "@/utils/helper";
+import { capitalizeWords, formatName } from "@/utils";
 
 interface Props {
   moves: PokemonMoveDetail[];

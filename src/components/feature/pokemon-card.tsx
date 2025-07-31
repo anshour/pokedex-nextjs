@@ -1,6 +1,10 @@
 import { PokemonDetail } from "@/types/pokemon";
-import { capitalizeWords, formatName } from "@/utils/helper";
-import { getPokemonArtworkImage, getPokemonCardColor } from "@/utils/pokemon";
+import {
+  getPokemonArtworkImage,
+  getPokemonCardColor,
+  capitalizeWords,
+  formatName,
+} from "@/utils";
 import Badge from "../ui/badge";
 
 interface PokemonCardProps {

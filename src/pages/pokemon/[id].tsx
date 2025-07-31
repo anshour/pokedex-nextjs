@@ -5,13 +5,15 @@ import PokemonMovesSection from "@/components/feature/pokemon-moves-section";
 import Badge from "@/components/ui/badge";
 import Button from "@/components/ui/button";
 import LoadingSpinner from "@/components/ui/loading-spinner";
-import Tabs, { TabData } from "@/components/ui/tabs";
+import Tabs from "@/components/ui/tabs";
 import { usePokemonDetail } from "@/hooks/use-pokemon";
-import { capitalizeWords } from "@/utils/helper";
-import { getPokemonArtworkImage, getPokemonCardColor } from "@/utils/pokemon";
+import {
+  capitalizeWords,
+  getPokemonArtworkImage,
+  getPokemonCardColor,
+} from "@/utils";
 import { MoveLeft } from "lucide-react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();

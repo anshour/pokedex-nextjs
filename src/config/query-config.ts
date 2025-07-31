@@ -1,4 +1,4 @@
-import displayErrorToast from "@/utils/display-error-toast";
+import { displayErrorToast } from "@/utils";
 import { QueryClientConfig } from "@tanstack/react-query";
 
 export const queryConfig: QueryClientConfig = {

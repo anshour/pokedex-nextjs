@@ -1,6 +1,6 @@
 import { PokemonDetail } from "@/types/pokemon";
 import Progress from "../ui/progress";
-import { getBaseStats, StatLevel, TotalStatLevel } from "@/utils/pokemon";
+import { getBaseStats, StatLevel, TotalStatLevel } from "@/utils";
 import { TOTAL_STAT_LEVEL } from "@/constants/pokemon";
 
 interface Props {

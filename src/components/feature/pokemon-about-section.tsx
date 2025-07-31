@@ -1,13 +1,12 @@
 import { PokemonDetail, PokemonSpeciesDetail } from "@/types/pokemon";
 import {
+  getPokemonGenderPercentage,
   capitalizeWords,
-  dmToCm,
   dmToFeetInches,
+  dmToCm,
   hgToKg,
   hgToLbs,
-  kgToLbs,
-} from "@/utils/helper";
-import { getPokemonGenderPercentage } from "@/utils/pokemon";
+} from "@/utils";
 import { Mars, Venus, VenusAndMars } from "lucide-react";
 
 interface Props {

@@ -1,10 +1,6 @@
+import { capitalizeWords, getPokemonArtworkImage } from "@/utils";
 import { EvolutionStep } from "@/types/pokemon";
-import { capitalizeWords } from "@/utils/helper";
-import {
-  getPokemonArtworkImage,
-  getPokemonThumbnailImage,
-} from "@/utils/pokemon";
-import { ChevronDown, ChevronsDown } from "lucide-react";
+import { ChevronsDown } from "lucide-react";
 
 interface Props {
   evolutionStep: EvolutionStep[];
@@ -20,7 +16,9 @@ const PokemonEvolutionSection = ({ evolutionStep }: Props) => {
             alt={step.species.name}
             className="object-contain h-22"
           />
-          <h4 className="text-center font-medium text-sm">{capitalizeWords(step.species.name)}</h4>
+          <h4 className="text-center font-medium text-sm">
+            {capitalizeWords(step.species.name)}
+          </h4>
 
           {index < evolutionStep.length - 1 && (
             <ChevronsDown className="text-gray-800 mx-auto my-2" />

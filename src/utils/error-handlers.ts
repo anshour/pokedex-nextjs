@@ -1,7 +1,9 @@
 import { AxiosError, isAxiosError } from "axios";
 import toast from "react-hot-toast";
 
-const displayErrorToast = (error: Error | AxiosError<{ message: string }>) => {
+export const displayErrorToast = (
+  error: Error | AxiosError<{ message: string }>
+) => {
   if (error instanceof Error && !isAxiosError(error)) {
     toast.error(error.message || "An unexpected error occurred");
     return;
@@ -21,5 +23,3 @@ const displayErrorToast = (error: Error | AxiosError<{ message: string }>) => {
 
   toast.error(error.response?.data?.message || "An unexpected error occurred");
 };
-
-export default displayErrorToast;
